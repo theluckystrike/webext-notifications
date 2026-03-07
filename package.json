@@ -1,5 +1,5 @@
 {
-  "name": "webext-notifications",
+  "name": "@theluckystrike/webext-notifications",
   "version": "1.0.0",
   "description": "Typed notification wrapper with click handlers for Chrome extensions",
   "main": "dist/index.js",
@@ -13,7 +13,8 @@
   "files": ["dist"],
   "scripts": {
     "build": "tsc",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepare": "npm run build"
   },
   "keywords": ["chrome-extension", "notifications", "webextension", "typescript"],
   "author": "theluckystrike",
