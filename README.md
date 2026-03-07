@@ -1,3 +1,7 @@
+[![npm](https://img.shields.io/npm/v/webext-notifications)](https://www.npmjs.com/package/webext-notifications)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+
 # webext-notifications
 
 Typed notification wrapper with click handlers for Chrome extensions.
@@ -85,4 +89,4 @@ MIT
 
 ---
 
-Built by [theluckystrike](https://github.com/theluckystrike) | [zovo.one](https://zovo.one)
+Built by [theluckystrike](https://github.com/theluckystrike) — [zovo.one](https://zovo.one)
