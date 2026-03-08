@@ -1,24 +1,34 @@
 {
-  "name": "@theluckystrike/webext-notifications",
+  "name": "@zovo/webext-notifications",
   "version": "1.0.0",
   "description": "Typed notification wrapper with click handlers and button actions for Chrome extensions. Part of @zovo/webext.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
-  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.js",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.js"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theluckystrike/webext-notifications.git"
+  },
+  "homepage": "https://github.com/theluckystrike/webext-notifications#readme",
+  "bugs": {
+    "url": "https://github.com/theluckystrike/webext-notifications/issues"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "files": [
     "dist",
     "README.md",
     "LICENSE"
   ],
+  "sideEffects": false,
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
@@ -28,26 +38,13 @@
     "chrome-extension",
     "chrome-notifications",
     "webextension",
-    "webext",
-    "browser-extension",
-    "notifications",
+    "browser-notifications",
     "typescript",
     "zovo",
-    "zovo-webext"
+    "webext"
   ],
   "author": "theluckystrike",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/theluckystrike/webext-notifications.git"
-  },
-  "homepage": "https://github.com/theluckystrike/webext-notifications#readme",
-  "bugs": {
-    "url": "https://github.com/theluckystrike/webext-notifications/issues"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "devDependencies": {
     "@types/chrome": "^0.0.287",
     "typescript": "^5.7.0",

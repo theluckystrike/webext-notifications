@@ -1,115 +1,104 @@
 # Contributing to webext-notifications
 
-Thank you for your interest in contributing! This guide will help you get started.
+Thank you for your interest in contributing to webext-notifications! This guide will help you get started.
+
+## Prerequisites
+
+- Node.js 20+
+- pnpm (recommended) or npm
 
 ## Development Setup
 
-1. **Fork the repository** — Click the "Fork" button on GitHub
+1. **Fork the repository**
+
+   Click the "Fork" button on the [GitHub repository](https://github.com/theluckystrike/webext-notifications)
 
 2. **Clone your fork**
+
    ```bash
    git clone https://github.com/YOUR_USERNAME/webext-notifications.git
    cd webext-notifications
    ```
 
 3. **Install dependencies**
+
    ```bash
-   corepack enable
    pnpm install
    ```
 
-4. **Run tests**
+4. **Create a feature branch**
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   # or
+   git checkout -b fix/bug-description
+   ```
+
+## Making Changes
+
+1. **Make your changes**
+
+   - Follow the existing code style
+   - Add TypeScript types for any new functionality
+   - Write tests for new features
+
+2. **Run tests**
+
    ```bash
    pnpm test
    ```
 
-5. **Build the project**
+3. **Build the project**
+
    ```bash
    pnpm build
    ```
 
-## Project Structure
+4. **Commit your changes**
 
-```
-webext-notifications/
-├── src/
-│   └── index.ts        # Main source code
-├── CHANGELOG.md        # Version history
-├── LICENSE             # MIT license
-├── package.json        # npm package config
-├── tsconfig.json       # TypeScript config
-└── README.md           # This file
-```
-
-## Making Changes
-
-1. **Create a feature branch**
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-2. **Make your changes** — Follow the existing code style and patterns
-
-3. **Add tests** — Ensure new functionality is covered
-
-4. **Build and test**
-   ```bash
-   pnpm build && pnpm test
-   ```
-
-5. **Commit your changes**
    ```bash
    git add .
-   git commit -m "feat: add your feature"
+   git commit -m "Add your descriptive commit message"
    ```
 
-6. **Push and create a PR**
+   We follow [Conventional Commits](https://www.conventionalcommits.org/):
+   - `feat:` for new features
+   - `fix:` for bug fixes
+   - `docs:` for documentation changes
+   - `test:` for test updates
+   - `refactor:` for code refactoring
+
+## Submitting a Pull Request
+
+1. **Push your branch**
+
    ```bash
-   git push your-fork feature/your-feature-name
+   git push origin feature/your-feature-name
    ```
 
-Then open a Pull Request on GitHub.
+2. **Open a Pull Request**
 
-## Code Style
+   - Go to your fork on GitHub
+   - Click "Compare & pull request"
+   - Fill in the PR template
+   - Submit your PR
 
-- Use TypeScript with strict mode
-- Follow existing formatting conventions
+3. **Review process**
+
+   - Maintainers will review your code
+   - Address any feedback promptly
+   - Once approved, your PR will be merged
+
+## Code Standards
+
+- Use TypeScript for all new code
+- Run `pnpm build` before submitting
+- Ensure tests pass
 - Add JSDoc comments for public APIs
-- Keep functions small and focused
-
-## Commit Messages
-
-We follow [Conventional Commits](https://conventionalcommits.org):
-
-- `feat:` — New feature
-- `fix:` — Bug fix
-- `docs:` — Documentation changes
-- `refactor:` — Code refactoring
-- `test:` — Adding or updating tests
-- `chore:` — Maintenance tasks
-
-Example:
-```
-feat: add notification queue support
-
-Add NotificationQueue class for managing multiple notifications
-without overwhelming the user with simultaneous alerts.
-```
-
-## Testing
-
-Run tests with vitest:
-```bash
-pnpm test
-```
-
-Add tests in the `src/` directory following the pattern `*.test.ts`.
 
 ## Questions?
 
-- Open an [issue](https://github.com/theluckystrike/webext-notifications/issues) for bugs or feature requests
-- Check existing issues before creating new ones
+- Open an issue for bugs or feature requests
+- Use discussions for questions
 
----
-
-We appreciate all contributions, big and small!
+We appreciate your contributions!
