@@ -230,6 +230,50 @@ queue.enqueue("msg-1", "New Message", "You have a new message", "icons/msg.png")
 queue.enqueue("msg-2", "Another Message", "From: Jane", "icons/msg.png");
 ```
 
+### Grouped Notifications
+
+Use notification IDs with prefixes to group related notifications:
+
+```typescript
+import { notifyBasic, clearNotification } from "@theluckystrike/webext-notifications";
+
+class NotificationGroup {
+  private groupId: string;
+  private notifications: string[] = [];
+
+  constructor(groupId: string) {
+    this.groupId = groupId;
+  }
+
+  async add(title: string, message: string, iconUrl: string) {
+    const notificationId = `${this.groupId}-${this.notifications.length}`;
+    this.notifications.push(notificationId);
+
+    await notifyBasic(notificationId, title, message, iconUrl);
+  }
+
+  async clearAll() {
+    for (const id of this.notifications) {
+      await clearNotification(id);
+    }
+    this.notifications = [];
+  }
+
+  getCount() {
+    return this.notifications.length;
+  }
+}
+
+// Usage: Group related notifications
+const downloadGroup = new NotificationGroup("downloads");
+await downloadGroup.add("File 1 downloaded", "report.pdf", "icons/file.png");
+await downloadGroup.add("File 2 downloaded", "data.csv", "icons/file.png");
+await downloadGroup.add("File 3 downloaded", "image.jpg", "icons/file.png");
+
+// Later, clear all at once
+// await downloadGroup.clearAll();
+```
+
 ### Auto-Dismiss Notification
 
 Create a notification that automatically clears after a timeout:
