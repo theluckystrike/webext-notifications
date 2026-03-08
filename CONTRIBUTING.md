@@ -1,104 +1,106 @@
 # Contributing to webext-notifications
 
-Thank you for your interest in contributing to webext-notifications! This guide will help you get started.
+Thank you for your interest in contributing! This document outlines the process for contributing to this project.
 
-## Prerequisites
+## Getting Started
 
-- Node.js 20+
-- pnpm (recommended) or npm
+### Fork the Repository
 
-## Development Setup
+1. Navigate to the [repository](https://github.com/theluckystrike/webext-notifications)
+2. Click the **Fork** button in the top-right corner
+3. Clone your fork locally:
 
-1. **Fork the repository**
+```bash
+git clone https://github.com/YOUR_USERNAME/webext-notifications.git
+cd webext-notifications
+```
 
-   Click the "Fork" button on the [GitHub repository](https://github.com/theluckystrike/webext-notifications)
+### Install Dependencies
 
-2. **Clone your fork**
+This project uses pnpm for package management:
 
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/webext-notifications.git
-   cd webext-notifications
-   ```
+```bash
+# Install pnpm if you haven't already
+npm install -g pnpm
 
-3. **Install dependencies**
+# Install dependencies
+pnpm install
+```
 
-   ```bash
-   pnpm install
-   ```
+### Create a Feature Branch
 
-4. **Create a feature branch**
+Create a new branch for your feature or bugfix:
 
-   ```bash
-   git checkout -b feature/your-feature-name
-   # or
-   git checkout -b fix/bug-description
-   ```
+```bash
+git checkout -b feature/your-feature-name
+# or
+git checkout -b fix/bug-description
+```
+
+## Development
+
+### Running Tests
+
+```bash
+pnpm test
+```
+
+This runs the test suite with Vitest.
+
+### Building
+
+```bash
+pnpm build
+```
+
+This compiles the TypeScript to JavaScript in the `dist` directory.
+
+### Code Style
+
+- Use TypeScript for all new code
+- Run `pnpm test` before committing
+- Follow existing code patterns in the project
 
 ## Making Changes
 
-1. **Make your changes**
+1. Make your changes in your feature branch
+2. Add tests for new functionality (if applicable)
+3. Ensure all tests pass
+4. Commit your changes with clear messages:
 
-   - Follow the existing code style
-   - Add TypeScript types for any new functionality
-   - Write tests for new features
+```bash
+git add .
+git commit -m "Add feature: description of your changes"
+```
 
-2. **Run tests**
+## Pull Request Process
 
-   ```bash
-   pnpm test
-   ```
-
-3. **Build the project**
-
-   ```bash
-   pnpm build
-   ```
-
-4. **Commit your changes**
-
-   ```bash
-   git add .
-   git commit -m "Add your descriptive commit message"
-   ```
-
-   We follow [Conventional Commits](https://www.conventionalcommits.org/):
-   - `feat:` for new features
-   - `fix:` for bug fixes
-   - `docs:` for documentation changes
-   - `test:` for test updates
-   - `refactor:` for code refactoring
-
-## Submitting a Pull Request
-
-1. **Push your branch**
+1. **Push your branch** to your fork:
 
    ```bash
    git push origin feature/your-feature-name
    ```
 
-2. **Open a Pull Request**
+2. **Open a Pull Request**:
+   - Navigate to the original repository
+   - Click **New Pull Request**
+   - Select your branch and submit
 
-   - Go to your fork on GitHub
-   - Click "Compare & pull request"
-   - Fill in the PR template
-   - Submit your PR
+3. **PR Description** should include:
+   - Summary of changes
+   - Related issue numbers (if applicable)
+   - Testing performed
 
-3. **Review process**
+## Code of Conduct
 
-   - Maintainers will review your code
-   - Address any feedback promptly
-   - Once approved, your PR will be merged
-
-## Code Standards
-
-- Use TypeScript for all new code
-- Run `pnpm build` before submitting
-- Ensure tests pass
-- Add JSDoc comments for public APIs
+- Be respectful and inclusive
+- Provide constructive feedback
+- Help others learn and improve
 
 ## Questions?
 
-- Open an issue for bugs or feature requests
-- Use discussions for questions
+If you have questions, feel free to open an issue or reach out through the repository.
 
-We appreciate your contributions!
+---
+
+Thank you for contributing!
