@@ -4,25 +4,28 @@ Thank you for your interest in contributing! This guide will help you get starte
 
 ## Development Setup
 
-1. **Clone the repository**
+1. **Fork the repository** — Click the "Fork" button on GitHub
+
+2. **Clone your fork**
    ```bash
-   git clone https://github.com/theluckystrike/webext-notifications.git
+   git clone https://github.com/YOUR_USERNAME/webext-notifications.git
    cd webext-notifications
    ```
 
-2. **Install dependencies**
+3. **Install dependencies**
    ```bash
-   npm install
+   corepack enable
+   pnpm install
    ```
 
-3. **Run tests**
+4. **Run tests**
    ```bash
-   npm test
+   pnpm test
    ```
 
-4. **Build the project**
+5. **Build the project**
    ```bash
-   npm run build
+   pnpm build
    ```
 
 ## Project Structure
@@ -51,7 +54,7 @@ webext-notifications/
 
 4. **Build and test**
    ```bash
-   npm run build && npm test
+   pnpm build && pnpm test
    ```
 
 5. **Commit your changes**
@@ -62,8 +65,10 @@ webext-notifications/
 
 6. **Push and create a PR**
    ```bash
-   git push origin feature/your-feature-name
+   git push your-fork feature/your-feature-name
    ```
+
+Then open a Pull Request on GitHub.
 
 ## Code Style
 
@@ -95,7 +100,7 @@ without overwhelming the user with simultaneous alerts.
 
 Run tests with vitest:
 ```bash
-npm test
+pnpm test
 ```
 
 Add tests in the `src/` directory following the pattern `*.test.ts`.
