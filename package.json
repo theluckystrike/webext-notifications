@@ -9,22 +9,9 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.js",
       "import": "./dist/index.js",
-      "require": "./dist/index.js"
+      "default": "./dist/index.js"
     }
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/theluckystrike/webext-notifications.git",
-    "directory": "."
-  },
-  "homepage": "https://github.com/theluckystrike/webext-notifications#readme",
-  "bugs": {
-    "url": "https://github.com/theluckystrike/webext-notifications/issues"
-  },
-  "engines": {
-    "node": ">=18.0.0"
   },
   "files": [
     "dist",
@@ -36,14 +23,22 @@
     "test": "vitest run",
     "prepare": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theluckystrike/webext-notifications.git"
+  },
+  "homepage": "https://github.com/theluckystrike/webext-notifications#readme",
+  "bugs": {
+    "url": "https://github.com/theluckystrike/webext-notifications/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "keywords": [
     "chrome-extension",
     "chrome-notifications",
     "webextension",
-    "webext",
-    "notifications",
-    "browser-notifications",
-    "push-notifications",
+    "browser-extension",
     "typescript",
     "zovo",
     "@zovo/webext"

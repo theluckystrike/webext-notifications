@@ -1,12 +1,12 @@
 # Contributing to webext-notifications
 
-Thank you for your interest in contributing! This library is part of the @zovo/webext ecosystem.
+Thank you for your interest in contributing! This document outlines the process for contributing to this project.
 
 ## Getting Started
 
 ### Fork the Repository
 
-1. Visit [theluckystrike/webext-notifications](https://github.com/theluckystrike/webext-notifications)
+1. Navigate to the [repository](https://github.com/theluckystrike/webext-notifications)
 2. Click the **Fork** button in the top-right corner
 3. Clone your fork locally:
 
@@ -17,46 +17,66 @@ cd webext-notifications
 
 ### Install Dependencies
 
-```bash
-# Using pnpm (recommended)
-pnpm install
+This project uses pnpm for package management:
 
-# Or using npm
-npm install
+```bash
+# Install pnpm if you haven't already
+npm install -g pnpm
+
+# Install dependencies
+pnpm install
 ```
 
 ### Create a Feature Branch
 
+Create a new branch for your feature or bugfix:
+
 ```bash
-# Create a new branch for your feature or fix
 git checkout -b feature/your-feature-name
 # or
-git checkout -b fix/description-of-fix
+git checkout -b fix/bug-description
 ```
 
-### Development
+## Development
+
+### Running Tests
 
 ```bash
-# Run tests
 pnpm test
-
-# Build the TypeScript
-pnpm build
-
-# Run tests in watch mode
-pnpm test --watch
 ```
 
-### Making Changes
+This runs the test suite with Vitest.
 
-1. Make your changes in the `src/` directory
-2. Add or update tests in `src/index.test.ts`
-3. Ensure the build passes: `pnpm build`
-4. Ensure all tests pass: `pnpm test`
+### Building
 
-### Submitting a Pull Request
+```bash
+pnpm build
+```
+
+This compiles the TypeScript to JavaScript in the `dist` directory.
+
+### Code Style
+
+- Use TypeScript for all new code
+- Run `pnpm test` before committing
+- Follow existing code patterns in the project
+
+## Making Changes
+
+1. Make your changes in your feature branch
+2. Add tests for new functionality (if applicable)
+3. Ensure all tests pass
+4. Commit your changes with clear messages:
+
+```bash
+git add .
+git commit -m "Add feature: description of your changes"
+```
+
+## Pull Request Process
 
 1. **Push your branch** to your fork:
+
    ```bash
    git push origin feature/your-feature-name
    ```
@@ -64,36 +84,23 @@ pnpm test --watch
 2. **Open a Pull Request**:
    - Navigate to the original repository
    - Click **New Pull Request**
-   - Select your branch from the dropdown
-   - Fill out the PR template with:
-     - Description of changes
-     - Related issue number (if applicable)
-     - Testing performed
+   - Select your branch and submit
 
-3. **PR Guidelines**:
-   - Keep changes focused and atomic
-   - Update documentation if needed
-   - Add tests for new functionality
-   - Ensure CI passes
+3. **PR Description** should include:
+   - Summary of changes
+   - Related issue numbers (if applicable)
+   - Testing performed
 
-## Code Style
+## Code of Conduct
 
-- Use TypeScript with strict mode
-- Follow existing code conventions
-- Use meaningful variable and function names
-- Comment complex logic
+- Be respectful and inclusive
+- Provide constructive feedback
+- Help others learn and improve
 
-## Reporting Issues
+## Questions?
 
-If you find a bug or have a feature request:
+If you have questions, feel free to open an issue or reach out through the repository.
 
-1. Check if the issue already exists
-2. Create a detailed issue with:
-   - Clear description
-   - Steps to reproduce (for bugs)
-   - Expected vs actual behavior
-   - Environment details (browser, OS)
+---
 
-## License
-
-By contributing, you agree that your contributions will be licensed under the MIT License.
+Thank you for contributing!
