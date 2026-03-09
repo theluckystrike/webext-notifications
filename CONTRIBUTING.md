@@ -1,106 +1,90 @@
 # Contributing to webext-notifications
 
-Thank you for your interest in contributing! This document outlines the process for contributing to this project.
+Thank you for your interest in contributing! This guide will help you get started.
 
-## Getting Started
+## Development Setup
 
-### Fork the Repository
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/niceByte/webext-notifications.git
+   cd webext-notifications
+   ```
 
-1. Navigate to the [repository](https://github.com/theluckystrike/webext-notifications)
-2. Click the **Fork** button in the top-right corner
-3. Clone your fork locally:
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-```bash
-git clone https://github.com/YOUR_USERNAME/webext-notifications.git
-cd webext-notifications
+3. **Build the project:**
+   ```bash
+   npm run build
+   ```
+
+4. **Run tests:**
+   ```bash
+   npm test
+   ```
+
+## Project Structure
+
 ```
-
-### Install Dependencies
-
-This project uses pnpm for package management:
-
-```bash
-# Install pnpm if you haven't already
-npm install -g pnpm
-
-# Install dependencies
-pnpm install
+webext-notifications/
+├── src/
+│   └── index.ts      # Main source code
+├── dist/             # Compiled output
+├── README.md         # Documentation
+├── CONTRIBUTING.md   # This file
+└── package.json      # Package configuration
 ```
-
-### Create a Feature Branch
-
-Create a new branch for your feature or bugfix:
-
-```bash
-git checkout -b feature/your-feature-name
-# or
-git checkout -b fix/bug-description
-```
-
-## Development
-
-### Running Tests
-
-```bash
-pnpm test
-```
-
-This runs the test suite with Vitest.
-
-### Building
-
-```bash
-pnpm build
-```
-
-This compiles the TypeScript to JavaScript in the `dist` directory.
-
-### Code Style
-
-- Use TypeScript for all new code
-- Run `pnpm test` before committing
-- Follow existing code patterns in the project
 
 ## Making Changes
 
-1. Make your changes in your feature branch
-2. Add tests for new functionality (if applicable)
-3. Ensure all tests pass
-4. Commit your changes with clear messages:
+### Code Style
 
-```bash
-git add .
-git commit -m "Add feature: description of your changes"
+- Use TypeScript with strict mode
+- Run `npm run build` before committing
+- Ensure all tests pass
+
+### Testing
+
+Add tests for new functionality in `src/index.test.ts`:
+
+```typescript
+import { describe, it, expect } from "vitest";
+
+describe("your feature", () => {
+  it("should work correctly", () => {
+    // Test implementation
+  });
+});
 ```
+
+### Commit Messages
+
+Follow conventional commit format:
+
+- `feat: add new notification type`
+- `fix: resolve handler memory leak`
+- `docs: update API documentation`
+- `test: add tests for progress notifications`
 
 ## Pull Request Process
 
-1. **Push your branch** to your fork:
+1. Create a feature branch: `git checkout -b feature/your-feature`
+2. Make your changes and add tests
+3. Ensure build and tests pass
+4. Update documentation if needed
+5. Push and open a pull request
 
-   ```bash
-   git push origin feature/your-feature-name
-   ```
+## Reporting Issues
 
-2. **Open a Pull Request**:
-   - Navigate to the original repository
-   - Click **New Pull Request**
-   - Select your branch and submit
+When reporting bugs, include:
 
-3. **PR Description** should include:
-   - Summary of changes
-   - Related issue numbers (if applicable)
-   - Testing performed
+- Browser and OS version
+- Steps to reproduce
+- Expected vs actual behavior
+- Any error messages
 
-## Code of Conduct
+## License
 
-- Be respectful and inclusive
-- Provide constructive feedback
-- Help others learn and improve
-
-## Questions?
-
-If you have questions, feel free to open an issue or reach out through the repository.
-
----
-
-Thank you for contributing!
+By contributing, you agree that your contributions will be licensed under the MIT License.
