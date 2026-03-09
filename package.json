@@ -4,29 +4,33 @@
   "description": "Typed notification wrapper with click handlers and button actions for Chrome extensions. Part of @zovo/webext.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/theluckystrike/webext-notifications.git"
+    "url": "https://github.com/theluckystrike/webext-notifications.git",
+    "directory": "."
   },
   "homepage": "https://github.com/theluckystrike/webext-notifications#readme",
   "bugs": {
     "url": "https://github.com/theluckystrike/webext-notifications/issues"
   },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    }
+  "engines": {
+    "node": ">=18.0.0"
   },
   "files": [
     "dist",
     "README.md",
     "LICENSE"
   ],
-  "sideEffects": false,
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
@@ -34,14 +38,14 @@
   },
   "keywords": [
     "chrome-extension",
-    "notifications",
+    "chrome-notifications",
     "webextension",
+    "webext",
+    "notifications",
+    "browser-notifications",
+    "push-notifications",
     "typescript",
-    "chrome",
-    "browser-extension",
-    "popup-notification",
-    "system-notification",
-    "@zovo",
+    "zovo",
     "@zovo/webext"
   ],
   "author": "theluckystrike",

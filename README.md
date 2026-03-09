@@ -1,226 +1,227 @@
-[![CI](https://github.com/theluckystrike/webext-notifications/actions/workflows/ci.yml/badge.svg)](https://github.com/theluckystrike/webext-notifications/actions/workflows/ci.yml)
+[![CI](https://github.com/theluckystrike/webext-notifications/actions/workflows/ci.yml/badge.svg)](https://github.com/theluckystrike/webext-notifications/actions)
 [![npm](https://img.shields.io/npm/v/@theluckystrike/webext-notifications)](https://www.npmjs.com/package/@theluckystrike/webext-notifications)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![npm downloads](https://img.shields.io/npm/dt/@theluckystrike/webext-notifications)](https://www.npmjs.com/package/@theluckystrike/webext-notifications)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
 
 # webext-notifications
 
-A type-safe TypeScript wrapper for the Chrome Notifications API with built-in event handling. Simplifies creating, updating, and managing notifications in Chrome extensions with full TypeScript support and promise-based API.
+> Typed notification wrapper with click handlers and button actions for Chrome extensions. Part of @zovo/webext.
 
-Part of the [chrome-extension-guide](https://github.com/theluckystrike/chrome-extension-guide) ecosystem — a comprehensive collection of TypeScript packages for building modern Chrome extensions.
-
----
+A type-safe, promise-based notification library for Chrome extensions with full support for click handlers, button actions, progress bars, and more.
 
 ## Features
 
-- **🚀 Type-Safe** — Full TypeScript support with comprehensive type definitions
-- **⚡ Promise-Based** — Modern async/await API for all notification operations
-- **🖱️ Event Handling** — Built-in support for click, button click, and close events
-- **📊 Progress Notifications** — Native progress bar support for downloads/tasks
-- **🔄 Updates & Cleanup** — Easily update or clear existing notifications
-- **🧹 Automatic Cleanup** — Event handlers are automatically cleaned up when notifications close
-- **🎯 Multiple Types** — Support for basic, image, list, and progress notification types
-
----
+- **🔔 Create Notifications** — Basic, image, list, and progress notifications with full type safety
+- **👆 Click Handlers** — Handle notification clicks, button clicks, and close events
+- **🔘 Button Actions** — Add up to 2 action buttons with custom handlers
+- **📊 Progress Bars** — Show download/upload progress with dynamic updates
+- **⏱️ Auto-dismiss** — Automatic dismissal after a configurable duration
+- **📋 Templates** — Reusable notification patterns for common use cases
 
 ## Install
 
 ```bash
 npm install @theluckystrike/webext-notifications
-```
-
-Or with yarn:
-
-```bash
-yarn add @theluckystrike/webext-notifications
-```
-
-Or with pnpm:
-
-```bash
+# or
 pnpm add @theluckystrike/webext-notifications
 ```
-
----
 
 ## Quick Start
 
 ```typescript
-import { notifyBasic } from "@theluckystrike/webext-notifications";
+import { notifyBasic, notify, notifyProgress, updateNotification, clearNotification } from "@theluckystrike/webext-notifications";
 
-// Create a simple notification with click handler
-await notifyBasic("welcome", "Hello!", "Welcome to my extension", "/icons/icon.png", {
-  onClick: (id) => console.log(`Notification ${id} was clicked!`),
-  onClose: (id, byUser) => console.log(`Notification ${id} closed by user: ${byUser}`),
+// Simple notification with click handler
+await notifyBasic(
+  "welcome",
+  "Hello!",
+  "Welcome to the extension",
+  "icons/icon.png",
+  {
+    onClick: (id) => console.log("Notification clicked:", id),
+    onClose: (id, byUser) => console.log("Closed:", id, byUser),
+  }
+);
+
+// Full-featured notification with buttons
+await notify(
+  "update-available",
+  {
+    type: "basic",
+    title: "New Update",
+    message: "Version 2.0 is available with new features",
+    iconUrl: "icons/update.png",
+    priority: 1,
+    buttons: [
+      { title: "Update Now" },
+      { title: "Later" }
+    ],
+    requireInteraction: true,
+  },
+  {
+    onButtonClick: (id, index) => {
+      if (index === 0) {
+        // User clicked "Update Now"
+        installUpdate();
+      }
+    },
+    onClose: (id, byUser) => {
+      if (!byUser) console.log("Auto-dismissed");
+    }
+  }
+);
+```
+
+## Advanced Usage
+
+### Progress Notifications
+
+```typescript
+// Create progress notification
+await notifyProgress(
+  "download",
+  "Downloading file...",
+  "Please wait",
+  "icons/download.png",
+  0 // Start at 0%
+);
+
+// Update progress dynamically
+for (let i = 0; i <= 100; i += 10) {
+  await updateNotification("download", {
+    message: `${i}% complete`,
+    progress: i
+  });
+}
+
+// Mark as complete
+await updateNotification("download", {
+  title: "Download Complete",
+  message: "File saved to downloads folder",
+  progress: -1 // -1 removes the progress bar
 });
 ```
 
-That's it! The notification will appear and your handlers will be automatically registered.
-
----
-
-## API Reference
-
-### `notify(id, options, eventHandlers?)`
-
-Creates a notification with full options and optional event handlers.
+### Notification Queue Pattern
 
 ```typescript
-const id = await notify("notification-id", {
-  type: "basic",
-  title: "New Message",
-  message: "You have 3 new messages",
-  iconUrl: "/icons/message.png",
-  contextMessage: "from: john@example.com",
-  priority: 1,
-  silent: false,
-  requireInteraction: false,
-}, {
-  onClick: (id) => openMessages(),
-  onButtonClick: (id, buttonIndex) => handleButton(id, buttonIndex),
-  onClose: (id, byUser) => cleanup(id),
-});
-```
+class NotificationQueue {
+  private queue: Array<{ title: string; message: string }> = [];
+  private currentId: string | null = null;
 
-**Parameters:**
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `id` | `string` | Unique identifier for the notification |
-| `options` | `NotifyOptions` | Notification configuration options |
-| `eventHandlers?` | `Partial<HandlerSet>` | Optional event handlers |
+  async enqueue(title: string, message: string) {
+    this.queue.push({ title, message });
+    if (!this.currentId) this.processNext();
+  }
 
-**Returns:** `Promise<string>` — Resolves to the notification ID
+  private async processNext() {
+    if (this.queue.length === 0) {
+      this.currentId = null;
+      return;
+    }
 
----
+    const notification = this.queue.shift()!;
+    this.currentId = "queue-" + Date.now();
 
-### `notifyBasic(id, title, message, iconUrl, eventHandlers?)`
-
-Shorthand function for creating basic text notifications.
-
-```typescript
-await notifyBasic("welcome", "Welcome!", "Thanks for installing", "/icons/icon.png", {
-  onClick: (id) => openWelcomeScreen(),
-});
-```
-
-**Parameters:**
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `id` | `string` | Unique identifier for the notification |
-| `title` | `string` | Notification title (required) |
-| `message` | `string` | Notification message body |
-| `iconUrl` | `string` | Path to notification icon |
-| `eventHandlers?` | `Partial<HandlerSet>` | Optional event handlers |
-
-**Returns:** `Promise<string>` — Resolves to the notification ID
-
----
-
-### `notifyProgress(id, title, message, iconUrl, progress)`
-
-Creates a progress notification to show task completion status.
-
-```typescript
-// Show 50% progress
-await notifyProgress("download", "Downloading file", "50% complete", "/icons/download.png", 50);
-
-// Update to 75%
-await updateNotification("download", { progress: 75 });
-
-// Complete
-await updateNotification("download", { title: "Download complete!", progress: 100 });
-```
-
-**Parameters:**
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `id` | `string` | Unique identifier for the notification |
-| `title` | `string` | Notification title |
-| `message` | `string` | Status message |
-| `iconUrl` | `string` | Path to icon |
-| `progress` | `number` | Progress value 0-100 |
-
-**Returns:** `Promise<string>` — Resolves to the notification ID
-
----
-
-### `updateNotification(id, options)`
-
-Updates an existing notification with new content.
-
-```typescript
-// Update progress
-await updateNotification("download", { progress: 75 });
-
-// Update title and message
-await updateNotification("status", { title: "Processing...", message: "Almost done" });
-
-// Add buttons to existing notification
-await updateNotification("action", { buttons: [{ title: "View" }, { title: "Dismiss" }] });
-```
-
-**Parameters:**
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `id` | `string` | ID of the notification to update |
-| `options` | `Partial<NotifyOptions>` | New options to apply |
-
-**Returns:** `Promise<boolean>` — `true` if successfully updated
-
----
-
-### `clearNotification(id)`
-
-Clears/removes a notification from the notification center.
-
-```typescript
-await clearNotification("download");
-
-// Check result
-const wasCleared = await clearNotification("notification-id");
-if (wasCleared) {
-  console.log("Notification cleared successfully");
+    await notifyBasic(
+      this.currentId,
+      notification.title,
+      notification.message,
+      "icons/info.png",
+      {
+        onClose: () => this.processNext()
+      }
+    );
+  }
 }
 ```
 
-**Parameters:**
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `id` | `string` | ID of the notification to clear |
-
-**Returns:** `Promise<boolean>` — `true` if successfully cleared
-
----
-
-### `clearAllHandlers()`
-
-Manually clears all registered event handlers. Typically used in testing or when unloading the extension.
+### Deep-Link Style Notifications
 
 ```typescript
-clearAllHandlers();
+// Use notification ID as a routing mechanism
+await notify(
+  "open-dashboard",
+  {
+    type: "basic",
+    title: "Task Complete",
+    message: "Click to view your dashboard",
+    iconUrl: "icons/check.png",
+    buttons: [
+      { title: "View Details" },
+      { title: "Dismiss" }
+    ]
+  },
+  {
+    onClick: (id) => {
+      // Navigate to dashboard
+      chrome.tabs.create({ url: "dashboard.html" });
+    },
+    onButtonClick: (id, index) => {
+      if (index === 0) {
+        chrome.tabs.create({ url: "details.html" });
+      }
+    }
+  }
+);
 ```
 
----
+### Grouped Notifications
 
-## Notification Options
+```typescript
+// Create a visual group using similar prefixes
+await notify(
+  "email-unread-1",
+  { type: "list", title: "New Emails", message: "3 unread", items: [
+    { title: "From: Alice", message: "Meeting tomorrow" },
+    { title: "From: Bob", message: "Project update" },
+    { title: "From: Carol", message: "Re: Report" }
+  ]}
+);
+```
 
-Full options object passed to `notify()`:
+## API Reference
+
+### Core Functions
+
+| Function | Description | Returns |
+|----------|-------------|---------|
+| `notify(id, options, handlers?)` | Create a notification with full options | `Promise<string>` |
+| `notifyBasic(id, title, message, iconUrl, handlers?)` | Shorthand for basic text notifications | `Promise<string>` |
+| `notifyProgress(id, title, message, iconUrl, progress)` | Create a progress notification (0-100) | `Promise<string>` |
+| `updateNotification(id, options)` | Update an existing notification | `Promise<boolean>` |
+| `clearNotification(id)` | Clear a notification | `Promise<boolean>` |
+
+### Event Handlers
+
+| Handler | Signature | Description |
+|---------|-----------|-------------|
+| `onClick` | `(id: string) => void` | Notification body clicked |
+| `onButtonClick` | `(id: string, buttonIndex: number) => void` | Button clicked (index: 0 or 1) |
+| `onClose` | `(id: string, byUser: boolean) => void` | Notification closed (byUser: true if user dismissed) |
+
+### Notification Types
+
+```typescript
+type NotificationType = "basic" | "image" | "list" | "progress";
+```
+
+### NotifyOptions
 
 ```typescript
 interface NotifyOptions {
-  type: NotificationType;           // "basic" | "image" | "list" | "progress"
-  title: string;                     // Notification title
-  message: string;                   // Message body
-  iconUrl: string;                   // Icon path (required)
-  contextMessage?: string;           // Secondary text below message
-  priority?: 0 | 1 | 2;              // Priority level (0=normal, 2=high)
-  buttons?: NotificationButton[];    // Action buttons
-  imageUrl?: string;                 // Image for "image" type
-  items?: NotificationItem[];        // List items for "list" type
-  progress?: number;                 // Progress 0-100 for "progress" type
-  silent?: boolean;                  // Suppress sound
-  requireInteraction?: boolean;      // Keep until user interacts
+  type: NotificationType;
+  title: string;
+  message: string;
+  iconUrl: string;
+  contextMessage?: string;      // Secondary text below message
+  priority?: 0 | 1 | 2;         // Priority level
+  buttons?: NotificationButton[];
+  imageUrl?: string;             // For "image" type
+  items?: NotificationItem[];   // For "list" type
+  progress?: number;             // 0-100 for progress, -1 to hide
+  silent?: boolean;             // Mute notification sound
+  requireInteraction?: boolean; // Keep visible until dismissed
 }
 
 interface NotificationButton {
@@ -234,227 +235,77 @@ interface NotificationItem {
 }
 ```
 
----
+## Permissions
 
-## Event Handlers
-
-### `onClick`
-
-Called when the user clicks the notification body (not a button).
-
-```typescript
-await notify("my-notification", {...}, {
-  onClick: (id) => {
-    console.log(`User clicked notification: ${id}`);
-    // Open extension page, focus window, etc.
-  },
-});
-```
-
-### `onButtonClick`
-
-Called when the user clicks a button on the notification.
-
-```typescript
-await notify("action", {
-  type: "basic",
-  title: "Update Available",
-  message: "Version 2.0 is ready",
-  iconUrl: "/icons/update.png",
-  buttons: [
-    { title: "Update Now" },
-    { title: "Later" },
-    { title: "Skip" },
-  ],
-}, {
-  onButtonClick: (id, buttonIndex) => {
-    switch (buttonIndex) {
-      case 0: installUpdate(); break;
-      case 1: snoozeUpdate(); break;
-      case 2: skipUpdate(); break;
-    }
-  },
-});
-```
-
-### `onClose`
-
-Called when the notification is closed (either by user or programmatically).
-
-```typescript
-await notify("temp", {...}, {
-  onClose: (id, byUser) => {
-    console.log(`Notification ${id} closed. By user: ${byUser}`);
-    // Cleanup resources, remove from tracking, etc.
-  },
-});
-```
-
-**Handler Signature Summary:**
-
-| Handler | Signature | Description |
-|---------|-----------|-------------|
-| `onClick` | `(id: string) => void` | Triggered when notification body is clicked |
-| `onButtonClick` | `(id: string, buttonIndex: number) => void` | Triggered when a button is clicked |
-| `onClose` | `(id: string, byUser: boolean) => void` | Triggered when notification closes |
-
----
-
-## Complete Examples
-
-### Download Progress Tracker
-
-```typescript
-import { notifyProgress, updateNotification, clearNotification } from "@theluckystrike/webext-notifications";
-
-async function trackDownload(fileName: string) {
-  const notificationId = `download-${fileName}`;
-  
-  // Start progress notification
-  await notifyProgress(
-    notificationId,
-    "Downloading",
-    `Starting download: ${fileName}`,
-    "/icons/download.png",
-    0
-  );
-
-  // Simulate progress updates
-  for (let progress = 0; progress <= 100; progress += 10) {
-    await updateNotification(notificationId, {
-      progress,
-      message: `${progress}% complete`,
-    });
-    await new Promise(r => setTimeout(r, 500));
-  }
-
-  // Complete
-  await updateNotification(notificationId, {
-    title: "Download Complete",
-    message: `${fileName} is ready`,
-    progress: undefined, // Remove progress bar
-  });
-
-  // Clear after delay
-  setTimeout(() => clearNotification(notificationId), 5000);
-}
-```
-
-### Multi-Action Notification
-
-```typescript
-import { notify } from "@theluckystrike/webext-notifications";
-
-await notify("new-friend", {
-  type: "basic",
-  title: "New Friend Request",
-  message: "John Doe wants to connect",
-  iconUrl: "/icons/friends.png",
-  contextMessage: " mutual friends",
-  priority: 1,
-  buttons: [
-    { title: "Accept" },
-    { title: "Decline" },
-    { title: "Block" },
-  ],
-  requireInteraction: true,
-}, {
-  onButtonClick: async (id, buttonIndex) => {
-    switch (buttonIndex) {
-      case 0: // Accept
-        await acceptFriendRequest();
-        break;
-      case 1: // Decline
-        await declineFriendRequest();
-        break;
-      case 2: // Block
-        await blockUser();
-        break;
-    }
-    await clearNotification(id);
-  },
-  onClick: (id) => {
-    // Open full profile when clicking notification body
-    chrome.tabs.create({ url: "/profile.html" });
-  },
-});
-```
-
-### Silent Notification with Auto-Clear
-
-```typescript
-import { notifyBasic, clearNotification } from "@theluckystrike/webext-notifications";
-
-// Silent notification - no sound
-await notifyBasic("info", "Background Task Complete", "Data synced successfully", "/icons/sync.png", {
-  silent: true,
-  onClose: async (id) => {
-    // Could save state or update badge
-    console.log(`Notification ${id} was dismissed`);
-  },
-});
-
-// Auto-clear after 3 seconds
-setTimeout(() => clearNotification("info"), 3000);
-```
-
----
-
-## Chrome Extension Manifest
-
-Ensure you have the required permissions in your `manifest.json`:
+Add the `notifications` permission to your `manifest.json`:
 
 ```json
 {
-  "manifest_version": 3,
-  "name": "My Extension",
   "permissions": [
     "notifications"
-  ],
-  "icons": {
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
-  }
+  ]
 }
 ```
 
-**Note:** For MV3 (Manifest V3), notifications work automatically in background scripts and popup/context menu actions. For content scripts, use message passing to communicate with the service worker.
+For full functionality, you may also need:
 
----
+```json
+{
+  "permissions": [
+    "notifications",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ]
+}
+```
 
-## Related Packages
+## Platform Notes
 
-This package is part of the **chrome-extension-guide** ecosystem:
+### Chrome / Chromium-based Browsers (Edge, Brave, etc.)
 
-- [chrome-extension-guide](https://github.com/theluckystrike/chrome-extension-guide) — Monorepo with all packages
-- [@theluckystrike/webext-storage](https://github.com/theluckystrike/webext-storage) — Type-safe storage wrapper
-- [@theluckystrike/webext-tabs](https://github.com/theluckystrike/webext-tabs) — Tab management utilities
-- [@theluckystrike/webext-messaging](https://github.com/theluckystrike/webext-messaging) — Type-safe message passing
+- Full support for all notification types
+- Button support (max 2 buttons)
+- Progress bars supported
+- `requireInteraction` works as expected
+- Notification sounds can be silenced with `silent: true`
 
----
+### Firefox
 
-## Browser Support
+- Similar API but some differences:
+  - Button icons (`iconUrl`) are not supported
+  - Progress notifications work differently
+  - `requireInteraction` has limited support
+- Check [MDN](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/notifications) for latest compatibility
 
-| Browser | Support |
-|---------|---------|
-| Chrome | ✅ Full |
-| Edge | ✅ Full (Chromium) |
-| Opera | ✅ Full (Chromium) |
-| Brave | ✅ Full |
-| Firefox | ⚠️ Uses Web Notifications API (different API) |
+### Edge (Chromium)
 
-This package targets Chrome's `chrome.notifications` API. For Firefox, consider using the Web Notifications API directly or the [webextension-polyfill](https://github.com/mozilla/webextension-polyfill).
+- Full Chrome compatibility
 
----
+### Opera
+
+- Full Chrome compatibility
+
+## Part of @zovo/webext
+
+This library is part of the @zovo/webext ecosystem — a collection of type-safe utilities for Chrome extension development.
+
+```bash
+# Other packages in the ecosystem
+npm install @zovo/webext-storage    # Typed storage wrapper
+npm install @zovo/webext-tabs       # Tab management utilities
+npm install @zovo/webext-messaging  # Cross-context messaging
+```
 
 ## License
 
-MIT © [theluckystrike](https://github.com/theluckystrike)
+MIT
 
 ---
 
-<div align="center">
-
 Built by [theluckystrike](https://github.com/theluckystrike) — [zovo.one](https://zovo.one)
 
-</div>
+<a href="https://zovo.one">
+  <img src="https://zovo.one/logo.svg" alt="Zovo" width="32" height="32" />
+</a>
